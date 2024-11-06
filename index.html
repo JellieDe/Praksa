@@ -4,8 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Google Sheets Data Table</title>
+  
   <!-- DataTables CSS -->
   <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+  
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -21,8 +23,11 @@
 
 <div class="container">
   <h2>Data from Google Sheets</h2>
+  
+  <!-- Search box -->
   <input type="text" id="searchBox" placeholder="Search..." onkeyup="filterTable()" style="margin-bottom: 10px; width: 100%; padding: 8px;">
 
+  <!-- Table for displaying Google Sheets data -->
   <table id="dataTable" class="display">
     <thead>
       <tr>
@@ -43,13 +48,17 @@
 <!-- jQuery and DataTables JS -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
 <script>
   $(document).ready(function() {
-    const sheetID = '<YOUR_SHEET_ID>';
+    const sheetID = '2PACX-1vS8I5VNt9e8Cv7ErkToQc58GcytOyEDIbWx0xOsGnAnb6QH5t_aTC-NvG4DGHkk_g'; // Replace with your actual Google Sheet ID
     const sheetURL = `https://spreadsheets.google.com/feeds/list/${sheetID}/1/public/values?alt=json`;
 
+    // Fetch data from Google Sheets JSON feed
     $.getJSON(sheetURL, function(data) {
       const entries = data.feed.entry;
+      
+      // Loop through each entry and add a row to the table
       entries.forEach(entry => {
         const row = `
           <tr>
@@ -63,10 +72,13 @@
         `;
         $('#tableBody').append(row);
       });
+
+      // Initialize DataTables after data is populated
       $('#dataTable').DataTable();
     });
   });
 
+  // Filter table based on search box input
   function filterTable() {
     const searchValue = $('#searchBox').val().toLowerCase();
     $('#dataTable').DataTable().search(searchValue).draw();
@@ -75,3 +87,4 @@
 
 </body>
 </html>
+
