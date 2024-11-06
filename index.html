@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Google Sheets Data Table</title>
+  <!-- DataTables CSS -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    .container {
+      width: 80%;
+      margin: auto;
+      padding-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Data from Google Sheets</h2>
+  <input type="text" id="searchBox" placeholder="Search..." onkeyup="filterTable()" style="margin-bottom: 10px; width: 100%; padding: 8px;">
+
+  <table id="dataTable" class="display">
+    <thead>
+      <tr>
+        <th>Ime</th>
+        <th>Prezime</th>
+        <th>Godina</th>
+        <th>Ustanova</th>
+        <th>Ugovor</th>
+        <th>Odrađeno</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody">
+      <!-- Data will be populated here -->
+    </tbody>
+  </table>
+</div>
+
+<!-- jQuery and DataTables JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script>
+  $(document).ready(function() {
+    const sheetID = '<YOUR_SHEET_ID>';
+    const sheetURL = `https://spreadsheets.google.com/feeds/list/${sheetID}/1/public/values?alt=json`;
+
+    $.getJSON(sheetURL, function(data) {
+      const entries = data.feed.entry;
+      entries.forEach(entry => {
+        const row = `
+          <tr>
+            <td>${entry.gsx$ime.$t}</td>
+            <td>${entry.gsx$prezime.$t}</td>
+            <td>${entry.gsx$godina.$t}</td>
+            <td>${entry.gsx$ustanova.$t}</td>
+            <td>${entry.gsx$ugovor.$t}</td>
+            <td>${entry.gsx$odrađeno.$t}</td>
+          </tr>
+        `;
+        $('#tableBody').append(row);
+      });
+      $('#dataTable').DataTable();
+    });
+  });
+
+  function filterTable() {
+    const searchValue = $('#searchBox').val().toLowerCase();
+    $('#dataTable').DataTable().search(searchValue).draw();
+  }
+</script>
+
+</body>
+</html>
