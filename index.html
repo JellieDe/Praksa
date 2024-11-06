@@ -74,17 +74,19 @@
       });
 
       // Initialize DataTables after data is populated
-      $('#dataTable').DataTable().searchPanes.rebuildPane();
+      $('#dataTable').DataTable();
     });
   });
 
   // Filter table based on search box input
   function filterTable() {
     const searchValue = $('#searchBox').val().toLowerCase();
-    $('#dataTable').DataTable().search(searchValue).draw();
+    const dataTable = $('#dataTable').DataTable();
+    dataTable.search(searchValue).draw();
   }
 </script>
 
 </body>
 </html>
+
 
